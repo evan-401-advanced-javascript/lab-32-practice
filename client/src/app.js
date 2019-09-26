@@ -1,39 +1,39 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 import io from 'socket.io-client';
 import Q from '@nmq/q/client';
+// eslint-disable-next-line
 import useForms from './hooks/useForms';
-import useSockets from './hooks/useSockets';
 
 // Connect outside of the render cycle ...
 const socket = io.connect('http://localhost:3003');
 const queue = new Q('deeds');
 
-const App = (props) => {
-
-  const [values, handleChange, handleSubmit] = useForms(publish);
+/**
+ * This function emits to the server when the submit button is pressed.
+ * It also renders all the components fo the front end.
+ * @returns {*}
+ * @constructor
+ */
+const App = () => {
   const [queueMessage, setQueueMessage] = useState({});
   const [socketMessage, setSocketMessage] = useState({});
-  const [data, connect] = useSockets('http://localhost:3303');
-
 
   function publish(values) {
-
     Q.publish('deeds', 'work', values);
     socket.emit('words', values);
+  }
 
-  };
+  const [values, handleChange, handleSubmit] = useForms(publish);
 
-  useEffect( () => {
-    queue.subscribe('work', message => {
-      console.log('message', message);
+  useEffect(() => {
+    queue.subscribe('work', (message) => {
       setQueueMessage(message);
     });
 
-    socket.on('incoming', message => {
+    socket.on('incoming', (message) => {
       setSocketMessage(message);
     });
-
   }, []);
 
 
@@ -49,7 +49,6 @@ const App = (props) => {
       </form>
     </>
   );
-}
+};
 
 export default App;
-
