@@ -11,7 +11,7 @@ const queue = new Q('deeds');
 
 /**
  * This function emits to the server when the submit button is pressed.
- * It also renders all the components fo the front end
+ * It also renders all the components fo the front end.
  * @returns {*}
  * @constructor
  */
